@@ -9,6 +9,10 @@ function printMessage (username, badgeCount, points) {
   console.log(message);
 }
 
+function printError(error) {
+  console.error(error.message);
+};
+
 //connect to the API (http://teamtreehouse.com/username.json)
 var request = http.get("http://teamtreehouse.com/" + username + ".json", function(response) { console.log(response.statusCode) });
 
@@ -17,12 +21,22 @@ response.on('data', function (chunk) {
   body += chunk;
 });
 response.on('end', function() {
-  console.log(typeOf body);
+  if(response.statusCode === 200) {
+    try {
+      var profile = JSON.parse(body);
+      printMessage(username, profile.badges.length, profile.points.JavaScript)
+    } catch(error) {
+      //parse error
+      printError(error);
+    }
+  } else {
+    //status error code
+    printError({message: "There was an error getting the profile for " + username + ". (" + http.STATUS_CODES[response.statusCode] + ")"});
+  }
 });
+
 //parse the data
 //print the data
 
-//display friendly error message
-request.on('error', function(error) {
-  console.log(error.message);
-});
+//connection Error
+request.on('error', function(error);
