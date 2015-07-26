@@ -11,7 +11,3 @@ http.createServer(function (request, response) {
   router.user(request, response);
 }).listen(3000);
 console.log("Server running at http://<web_server-url>/")
-
-
-
-//4.Function than handles the reading of files and merge in value.
